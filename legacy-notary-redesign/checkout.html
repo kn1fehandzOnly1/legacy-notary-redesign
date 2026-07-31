@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book & Pay Online | Legacy Notary Solutions</title>
+  <meta name="description" content="Securely schedule and pay for your mobile notary or loan signing services online with Stripe or Square. Fast, encrypted, and convenient.">
+  
+  <!-- Google Fonts: Outfit & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Stripe & Square SDK Placeholders -->
+  <script src="https://js.stripe.com/v3/"></script>
+  <script src="https://sandbox.web.squarecdn.com/v1/square.js"></script>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="checkout-page-body">
+
+  <!-- Checkout Header -->
+  <header class="checkout-header">
+    <div class="container checkout-header-flex">
+      <a href="index.html" class="brand-logo">
+        <img src="assets/logo.png" alt="Legacy Notary Solutions Logo" class="logo-img">
+      </a>
+      <div class="checkout-security-tag">
+        <i class="fa-solid fa-lock security-lock"></i>
+        <div>
+          <strong>256-Bit SSL Encrypted Checkout</strong>
+          <small>Powered by Stripe & Square</small>
+        </div>
+      </div>
+      <a href="index.html" class="btn btn-outline btn-sm"><i class="fa-solid fa-arrow-left"></i> Back to Main Site</a>
+    </div>
+  </header>
+
+  <!-- Checkout Main Content -->
+  <main class="checkout-main">
+    <div class="container">
+      
+      <div class="checkout-title-area text-center">
+        <span class="section-subtitle"><i class="fa-solid fa-shield-check"></i> SECURE ONLINE BOOKING</span>
+        <h1>Schedule & Pay for Mobile Service</h1>
+        <p>Complete your appointment details below and lock in your mobile notary appointment with instant payment confirmation.</p>
+      </div>
+
+      <div class="checkout-grid">
+        
+        <!-- Left Form Column -->
+        <div class="checkout-form-col">
+          <form id="checkout-form" class="checkout-form">
+            
+            <!-- Step 1: Service Selection -->
+            <div class="checkout-step-card">
+              <div class="step-header">
+                <div class="step-num">1</div>
+                <h3>Select Service & Quantity</h3>
+              </div>
+
+              <div class="form-group">
+                <label for="checkout-service">Service Type *</label>
+                <select id="checkout-service" class="form-control" required>
+                  <option value="general" data-price="25">General Notary (1-2 Documents) - $25 base</option>
+                  <option value="poa" data-price="45">Power of Attorney / Estate Docs - $45 base</option>
+                  <option value="refinance" data-price="125">Mortgage Refinance / Seller Package - $125 full package</option>
+                  <option value="full-loan" data-price="150" selected>Full Buyer Loan Signing Package - $150 full package</option>
+                  <option value="hospital" data-price="65">Hospital / Rehab Center Visit - $65 base</option>
+                  <option value="ron" data-price="35">Remote Online Notarization (RON) - $35 digital</option>
+                </select>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="checkout-stamps">Notary Stamps Required</label>
+                  <input type="number" id="checkout-stamps" class="form-control" value="1" min="1" max="15">
+                </div>
+                <div class="form-group">
+                  <label for="checkout-id-type">Primary Signer ID Type *</label>
+                  <select id="checkout-id-type" class="form-control" required>
+                    <option value="dl">Unexpired Driver's License</option>
+                    <option value="passport">US Passport or Foreign Passport</option>
+                    <option value="state-id">State Issued Identification Card</option>
+                    <option value="military">US Military ID</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 2: Location & Appointment -->
+            <div class="checkout-step-card">
+              <div class="step-header">
+                <div class="step-num">2</div>
+                <h3>Travel Location & Time</h3>
+              </div>
+
+              <div class="form-group">
+                <label for="checkout-location-zone">Service Travel Zone *</label>
+                <select id="checkout-location-zone" class="form-control" required>
+                  <option value="kc-mo" data-travel="20">Kansas City, MO (Downtown / Plaza / Midtown) - $20 travel</option>
+                  <option value="overland-park" data-travel="20" selected>Overland Park, KS - $20 travel</option>
+                  <option value="olathe" data-travel="25">Olathe / Lenexa, KS - $25 travel</option>
+                  <option value="lees-summit" data-travel="25">Lee's Summit / Blue Springs, MO - $25 travel</option>
+                  <option value="independence" data-travel="20">Independence / Raytown, MO - $20 travel</option>
+                  <option value="outskirts" data-travel="40">Extended Travel / Outer Counties - $40 travel</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="checkout-address">Exact Meeting Address *</label>
+                <input type="text" id="checkout-address" class="form-control" placeholder="1234 Nall Ave, Suite 100, Overland Park, KS 66211" required>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="checkout-date">Preferred Date *</label>
+                  <input type="date" id="checkout-date" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label for="checkout-time">Preferred Time Window *</label>
+                  <select id="checkout-time" class="form-control" required>
+                    <option value="Morning (8:00 AM - 11:00 AM)">Morning (8:00 AM - 11:00 AM)</option>
+                    <option value="Midday (11:00 AM - 2:00 PM)">Midday (11:00 AM - 2:00 PM)</option>
+                    <option value="Afternoon (2:00 PM - 5:00 PM)" selected>Afternoon (2:00 PM - 5:00 PM)</option>
+                    <option value="Evening (5:00 PM - 8:00 PM)">Evening (5:00 PM - 8:00 PM)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 3: Contact Details -->
+            <div class="checkout-step-card">
+              <div class="step-header">
+                <div class="step-num">3</div>
+                <h3>Contact & Signer Information</h3>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="checkout-name">Full Name *</label>
+                  <input type="text" id="checkout-name" class="form-control" placeholder="John Smith" required>
+                </div>
+                <div class="form-group">
+                  <label for="checkout-phone">Cell Phone Number *</label>
+                  <input type="tel" id="checkout-phone" class="form-control" placeholder="(816) 555-0199" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="checkout-email">Email Address (for receipt & confirmation) *</label>
+                <input type="email" id="checkout-email" class="form-control" placeholder="john@example.com" required>
+              </div>
+            </div>
+
+            <!-- Step 4: Payment Provider Gateway Integration -->
+            <div class="checkout-step-card payment-step-card">
+              <div class="step-header">
+                <div class="step-num">4</div>
+                <h3>Live Payment Method</h3>
+              </div>
+
+              <!-- Payment Provider Tabs -->
+              <div class="payment-tabs">
+                <button type="button" class="payment-tab active" data-provider="stripe">
+                  <i class="fa-brands fa-stripe provider-icon-stripe"></i>
+                  <span>Stripe / Credit Card</span>
+                </button>
+                <button type="button" class="payment-tab" data-provider="square">
+                  <i class="fa-square-check fa-solid provider-icon-square"></i>
+                  <span>Square / Cash App</span>
+                </button>
+              </div>
+
+              <!-- Stripe Elements Box -->
+              <div id="stripe-payment-container" class="payment-provider-box active">
+                <div class="provider-badge">
+                  <i class="fa-solid fa-lock"></i> Secured by Stripe 256-Bit SSL
+                </div>
+                
+                <div class="form-group">
+                  <label>Cardholder Name</label>
+                  <input type="text" id="stripe-card-name" class="form-control" placeholder="Name on card">
+                </div>
+
+                <div class="mock-card-element">
+                  <div class="form-group">
+                    <label>Card Number</label>
+                    <div class="input-with-icon">
+                      <input type="text" id="stripe-card-num" class="form-control" placeholder="4242 •••• •••• 4242" value="4242 4242 4242 4242">
+                      <i class="fa-solid fa-credit-card input-icon"></i>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>MM / YY</label>
+                      <input type="text" id="stripe-card-exp" class="form-control" placeholder="12/28" value="12/28">
+                    </div>
+                    <div class="form-group">
+                      <label>CVC</label>
+                      <input type="text" id="stripe-card-cvc" class="form-control" placeholder="123" value="123">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="express-checkout-row">
+                  <span>Supported Methods:</span>
+                  <div class="pay-icons">
+                    <i class="fa-brands fa-cc-visa"></i>
+                    <i class="fa-brands fa-cc-mastercard"></i>
+                    <i class="fa-brands fa-cc-amex"></i>
+                    <i class="fa-brands fa-apple-pay"></i>
+                    <i class="fa-brands fa-google-pay"></i>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Square Web Payments SDK Box -->
+              <div id="square-payment-container" class="payment-provider-box">
+                <div class="provider-badge square-badge">
+                  <i class="fa-solid fa-shield"></i> Powered by Square Web Payments
+                </div>
+
+                <div id="square-card-container" class="square-sdk-box">
+                  <div class="square-input-placeholder">
+                    <i class="fa-solid fa-square-poll-vertical"></i> Square Payment Form & Cash App Pay Ready
+                  </div>
+                </div>
+
+                <div class="express-checkout-row">
+                  <span>Supported Methods:</span>
+                  <div class="pay-icons">
+                    <i class="fa-solid fa-credit-card"></i>
+                    <span class="cashapp-tag"><i class="fa-solid fa-dollar-sign"></i> Cash App Pay</span>
+                    <i class="fa-brands fa-apple-pay"></i>
+                  </div>
+                </div>
+              </div>
+
+              <button type="submit" id="pay-submit-btn" class="btn btn-primary btn-full btn-lg glow-effect">
+                <i class="fa-solid fa-lock"></i> Pay $<span id="btn-pay-amount">170.00</span> & Confirm Booking
+              </button>
+
+            </div>
+
+          </form>
+        </div>
+
+        <!-- Right Summary Column -->
+        <div class="checkout-summary-col">
+          <div class="order-summary-card glass-card">
+            
+            <div class="summary-header">
+              <h3>Order Summary</h3>
+              <span class="badge-live-quote">Live Quote</span>
+            </div>
+
+            <div class="summary-items">
+              <div class="summary-line">
+                <div>
+                  <strong id="summary-service-title">Full Buyer Loan Signing Package</strong>
+                  <small id="summary-service-subtitle">State Notary & Closing Documents</small>
+                </div>
+                <span class="line-price" id="summary-base-price">$150.00</span>
+              </div>
+
+              <div class="summary-line">
+                <div>
+                  <strong>Mobile Travel Fee</strong>
+                  <small id="summary-travel-zone">Overland Park, KS Zone</small>
+                </div>
+                <span class="line-price" id="summary-travel-price">$20.00</span>
+              </div>
+
+              <div class="summary-line" id="stamps-extra-line" style="display: none;">
+                <div>
+                  <strong>Extra Notary Stamps</strong>
+                  <small><span id="summary-stamps-count">0</span> additional stamp(s) @ $6/ea</small>
+                </div>
+                <span class="line-price" id="summary-stamps-price">$0.00</span>
+              </div>
+            </div>
+
+            <div class="summary-divider"></div>
+
+            <div class="summary-total-row">
+              <span>Total Amount Due:</span>
+              <div class="total-price-tag">$<span id="summary-total-price">170.00</span></div>
+            </div>
+
+            <div class="summary-guarantees">
+              <div class="guarantee-item">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>100% Error-Free Closing Guarantee</span>
+              </div>
+              <div class="guarantee-item">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>Instant Email Receipt & Calendar Invite</span>
+              </div>
+              <div class="guarantee-item">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>Free Rescheduling up to 2 Hours Prior</span>
+              </div>
+            </div>
+
+            <div class="support-contact-box">
+              <i class="fa-solid fa-headset"></i>
+              <div>
+                <strong>Need Help Booking?</strong>
+                <p>Call/Text us 24/7 at <a href="tel:8164009871">(816) 400-9871</a></p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Confirmation Receipt Modal -->
+  <div class="modal-backdrop" id="receipt-modal">
+    <div class="modal-card receipt-card">
+      <div class="receipt-header text-center">
+        <div class="receipt-success-icon"><i class="fa-solid fa-check"></i></div>
+        <h2>Payment & Appointment Confirmed!</h2>
+        <p>Thank you for choosing Legacy Notary Solutions. Your booking is locked in.</p>
+      </div>
+
+      <div class="receipt-body">
+        <div class="receipt-row">
+          <span>Confirmation #:</span>
+          <strong id="receipt-conf-id">LNS-892410</strong>
+        </div>
+        <div class="receipt-row">
+          <span>Service:</span>
+          <span id="receipt-service">Loan Signing Package</span>
+        </div>
+        <div class="receipt-row">
+          <span>Date & Time:</span>
+          <span id="receipt-datetime">Tomorrow at 2:00 PM</span>
+        </div>
+        <div class="receipt-row">
+          <span>Location:</span>
+          <span id="receipt-location">1234 Nall Ave, Overland Park KS</span>
+        </div>
+        <div class="receipt-row">
+          <span>Paid via:</span>
+          <span id="receipt-provider">Stripe Credit Card</span>
+        </div>
+        <div class="receipt-row total-receipt-row">
+          <span>Total Paid:</span>
+          <strong id="receipt-total">$170.00</strong>
+        </div>
+      </div>
+
+      <div class="receipt-actions">
+        <button onclick="window.print()" class="btn btn-outline btn-full"><i class="fa-solid fa-print"></i> Print Receipt</button>
+        <a href="index.html" class="btn btn-primary btn-full"><i class="fa-solid fa-house"></i> Return to Homepage</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="payment.js"></script>
+</body>
+</html>
