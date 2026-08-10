@@ -1,3 +1,10 @@
 {
-  "outputDirectory": "legacy-notary-redesign"
+  "outputDirectory": "legacy-notary-redesign",
+  "routes": [
+    { "src": "/", "dest": "/index.html" },
+    { "src": "/checkout", "dest": "/checkout.html" },
+    { "src": "/(assets/.+)", "dest": "/$1" },
+    { "src": "/(.*\\.(css|js|png|jpg|jpeg|gif|svg|ico|webp))", "dest": "/$1" },
+    { "src": "/(.*)", "dest": "/$1" }
+  ]
 }
