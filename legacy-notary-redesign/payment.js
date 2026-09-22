@@ -60,17 +60,33 @@ document.addEventListener('DOMContentLoaded', () => {
   function setSubmitState(isLoading, message) {
     const payBtn = document.getElementById('pay-submit-btn');
     if (!payBtn) return;
+    payBtn.textContent = '';
+
+    const icon = document.createElement('i');
+    icon.classList.add('fa-solid');
+
+    const textNode = document.createElement('span');
+
     if (isLoading) {
       payBtn.disabled = true;
-      payBtn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> ${message || 'Processing payment...'}`;
+      icon.classList.add('fa-circle-notch', 'fa-spin');
+      textNode.textContent = ` ${message || 'Processing payment...'}`;
+      payBtn.appendChild(icon);
+      payBtn.appendChild(textNode);
       return;
     }
+
     payBtn.disabled = false;
-    payBtn.innerHTML = `<i class="fa-solid fa-lock"></i> Pay $<span id="btn-pay-amount">${summaryTotalPrice ? summaryTotalPrice.textContent : '0.00'}</span> & Confirm Booking`;
-    const refreshedBtnAmount = document.getElementById('btn-pay-amount');
-    if (refreshedBtnAmount && summaryTotalPrice) {
-      refreshedBtnAmount.textContent = summaryTotalPrice.textContent;
-    }
+    icon.classList.add('fa-lock');
+
+    const amountSpan = document.createElement('span');
+    amountSpan.id = 'btn-pay-amount';
+    amountSpan.textContent = summaryTotalPrice ? summaryTotalPrice.textContent : '0.00';
+
+    payBtn.appendChild(icon);
+    payBtn.appendChild(document.createTextNode(' Pay $'));
+    payBtn.appendChild(amountSpan);
+    payBtn.appendChild(document.createTextNode(' & Confirm Booking'));
   }
 
   function createIdempotencyKey() {
