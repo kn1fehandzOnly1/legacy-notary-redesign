@@ -3,6 +3,7 @@ const {
   sendJson,
   verifyStripeEvent
 } = require('./_lib/webhook-utils');
+const { setPaymentStatus } = require('../payments/_lib/payment-state');
 
 async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -22,17 +23,51 @@ async function handler(req, res) {
 
     switch (event.type) {
       case 'checkout.session.completed':
+        if (event.data && event.data.object && event.data.object.payment_intent) {
+          setPaymentStatus({
+            provider: 'stripe',
+            paymentId: event.data.object.payment_intent,
+            status: 'succeeded',
+            eventType: event.type
+          });
+        }
         console.info('Stripe webhook received checkout.session.completed', {
           id: event.id
         });
         break;
       case 'payment_intent.succeeded':
+        setPaymentStatus({
+          provider: 'stripe',
+          paymentId: event.data.object.id,
+          status: 'succeeded',
+          amountCents: event.data.object.amount || null,
+          eventType: event.type
+        });
         console.info('Stripe webhook received payment_intent.succeeded', {
           id: event.id
         });
         break;
       case 'payment_intent.payment_failed':
+        setPaymentStatus({
+          provider: 'stripe',
+          paymentId: event.data.object.id,
+          status: 'failed',
+          amountCents: event.data.object.amount || null,
+          eventType: event.type
+        });
         console.warn('Stripe webhook received payment_intent.payment_failed', {
+          id: event.id
+        });
+        break;
+      case 'payment_intent.canceled':
+        setPaymentStatus({
+          provider: 'stripe',
+          paymentId: event.data.object.id,
+          status: 'failed',
+          amountCents: event.data.object.amount || null,
+          eventType: event.type
+        });
+        console.warn('Stripe webhook received payment_intent.canceled', {
           id: event.id
         });
         break;

@@ -1842,6 +1842,32 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 16px;
 }
 
+.sdk-input-container {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+  background: var(--bg-white);
+}
+
+.payment-error-message {
+  min-height: 20px;
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: #B91C1C;
+}
+
+.payment-status-message {
+  min-height: 22px;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.payment-status-message.error {
+  color: #B91C1C;
+}
+
 .express-checkout-row {
   display: flex;
   align-items: center;
@@ -2037,4 +2063,3 @@ h1, h2, h3, h4, h5, h6 {
     grid-template-columns: 1fr;
   }
 }
-
