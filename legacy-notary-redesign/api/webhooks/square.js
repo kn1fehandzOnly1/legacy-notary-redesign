@@ -4,6 +4,19 @@ const {
   sendJson,
   verifySquareSignature
 } = require('./_lib/webhook-utils');
+const { setPaymentStatus } = require('../payments/_lib/payment-state');
+
+function mapSquarePaymentStatus(status) {
+  switch (status) {
+    case 'COMPLETED':
+      return 'succeeded';
+    case 'FAILED':
+    case 'CANCELED':
+      return 'failed';
+    default:
+      return 'pending';
+  }
+}
 
 async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -26,6 +39,22 @@ async function handler(req, res) {
     }
 
     const event = JSON.parse(rawBody.toString('utf8'));
+    const paymentData =
+      (event.data && event.data.object && event.data.object.payment) ||
+      event.payment ||
+      null;
+    if (paymentData && paymentData.id) {
+      setPaymentStatus({
+        provider: 'square',
+        paymentId: paymentData.id,
+        status: mapSquarePaymentStatus(paymentData.status),
+        amountCents:
+          (paymentData.amount_money && paymentData.amount_money.amount) ||
+          (paymentData.amountMoney && paymentData.amountMoney.amount) ||
+          null,
+        eventType: event.type || 'unknown'
+      });
+    }
 
     switch (event.type) {
       case 'payment.created':

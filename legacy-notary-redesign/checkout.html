@@ -16,7 +16,6 @@
   
   <!-- Stripe & Square SDK Placeholders -->
   <script src="https://js.stripe.com/v3/"></script>
-  <script src="https://sandbox.web.squarecdn.com/v1/square.js"></script>
 
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -178,30 +177,16 @@
                 <div class="provider-badge">
                   <i class="fa-solid fa-lock"></i> Secured by Stripe 256-Bit SSL
                 </div>
-                
+
                 <div class="form-group">
                   <label>Cardholder Name</label>
                   <input type="text" id="stripe-card-name" class="form-control" placeholder="Name on card">
                 </div>
 
-                <div class="mock-card-element">
-                  <div class="form-group">
-                    <label>Card Number</label>
-                    <div class="input-with-icon">
-                      <input type="text" id="stripe-card-num" class="form-control" placeholder="4242 •••• •••• 4242" value="4242 4242 4242 4242">
-                      <i class="fa-solid fa-credit-card input-icon"></i>
-                    </div>
-                  </div>
-                  <div class="form-row">
-                    <div class="form-group">
-                      <label>MM / YY</label>
-                      <input type="text" id="stripe-card-exp" class="form-control" placeholder="12/28" value="12/28">
-                    </div>
-                    <div class="form-group">
-                      <label>CVC</label>
-                      <input type="text" id="stripe-card-cvc" class="form-control" placeholder="123" value="123">
-                    </div>
-                  </div>
+                <div class="form-group">
+                  <label>Card Details</label>
+                  <div id="stripe-card-element" class="sdk-input-container"></div>
+                  <div id="stripe-card-errors" class="payment-error-message" role="alert" aria-live="polite"></div>
                 </div>
 
                 <div class="express-checkout-row">
@@ -222,11 +207,8 @@
                   <i class="fa-solid fa-shield"></i> Powered by Square Web Payments
                 </div>
 
-                <div id="square-card-container" class="square-sdk-box">
-                  <div class="square-input-placeholder">
-                    <i class="fa-solid fa-square-poll-vertical"></i> Square Payment Form & Cash App Pay Ready
-                  </div>
-                </div>
+                <div id="square-card-container" class="square-sdk-box"></div>
+                <div id="square-card-errors" class="payment-error-message" role="alert" aria-live="polite"></div>
 
                 <div class="express-checkout-row">
                   <span>Supported Methods:</span>
@@ -241,6 +223,7 @@
               <button type="submit" id="pay-submit-btn" class="btn btn-primary btn-full btn-lg glow-effect">
                 <i class="fa-solid fa-lock"></i> Pay $<span id="btn-pay-amount">170.00</span> & Confirm Booking
               </button>
+              <div id="payment-status-message" class="payment-status-message" role="status" aria-live="polite"></div>
 
             </div>
 

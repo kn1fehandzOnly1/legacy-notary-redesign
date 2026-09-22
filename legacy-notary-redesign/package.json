@@ -13,9 +13,7 @@
   "type": "commonjs",
   "private": true,
   "dependencies": {
-    "stripe": "^22.6.2"
-  },
-  "dependencies": {
+    "square": "^46.0.0",
     "stripe": "^22.6.2"
   }
 }
